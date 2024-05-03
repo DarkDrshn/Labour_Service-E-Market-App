@@ -1,5 +1,7 @@
 //based on client, show chats
-import React from "react";
+import React,{useState,useEffect} from "react";
+import Cookies from "js-cookie";
+import axios from 'axios';
 import {
   List,
   ListItem,
@@ -25,35 +27,35 @@ const TABLE_HEAD = [
     "Status",
   ];
 
-const TABLE_ROWS = [
-    {
-        // img: "/img/logos/logo-spotify.svg",
-        date: "17/01/2024",
-        req_id:
-          "r34255",
-        req_details:"Ceiling Light Setup ",
-        to_lsps: "Vipul Sutar",
-        status: "Pending",
-      },
-      {
-        // img: "/img/logos/logo-spotify.svg",
-        date: "17/01/2024",
-        req_id:
-          "r12345",
-        req_details: "Fix Leaking Pipe",
-        to_lsps: "Aryan Arora",
-        status: "Accepted",
-      },
-      {
-        // img: "/img/logos/logo-spotify.svg",
-        date: "17/01/2024",
-        req_id:
-          "r34567",
-        req_details:"Make Study Table",
-        to_lsps: "Anirudh Shukla",
-        status: "Accepted",
-      },
-];
+// const TABLE_ROWS = [
+//     {
+//         // img: "/img/logos/logo-spotify.svg",
+//         date: "17/01/2024",
+//         req_id:
+//           "r34255",
+//         req_details:"Ceiling Light Setup ",
+//         to_lsps: "Vipul Sutar",
+//         status: "Pending",
+//       },
+//       {
+//         // img: "/img/logos/logo-spotify.svg",
+//         date: "17/01/2024",
+//         req_id:
+//           "r12345",
+//         req_details: "Fix Leaking Pipe",
+//         to_lsps: "Aryan Arora",
+//         status: "Accepted",
+//       },
+//       {
+//         // img: "/img/logos/logo-spotify.svg",
+//         date: "17/01/2024",
+//         req_id:
+//           "r34567",
+//         req_details:"Make Study Table",
+//         to_lsps: "Anirudh Shukla",
+//         status: "Accepted",
+//       },
+// ];
 
 
 
@@ -75,29 +77,74 @@ function TrashIcon() {
 }
 
 function ClientDash() {
+  const [clientName, setClientName] = useState("");
+
+  useEffect(() => {
+    const clientNameFromCookie = Cookies.get("clientName");
+    if (clientNameFromCookie) {
+      setClientName(clientNameFromCookie);
+    }
+  }, []);
+
+  
+
+
+  const [bookingRequests, setBookingRequests] = useState([]);
+
+  const fetchBookingRequests = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/v1/bookinglaborer/getbooking',{
+        withCredentials:true,
+      })
+      console.log(response.data);
+      setBookingRequests(response.data);
+      const count_req = response.data.length;
+      setTotalReq(count_req);
+      const count_pending = response.data.filter(item => item.status === "Pending");
+      setPendingReq(count_pending.length);
+      const count_accepted = response.data.filter(item => item.status === "Accepted");
+      setAcceptedReq(count_accepted.length);
+
+    } catch (error) {
+      console.error('Error fetching booking requests:', error);
+    }
+  };
+
+
+
+
+  useEffect(() => {
+    fetchBookingRequests();
+  }, []);
+
+  const [totalReq, setTotalReq] = useState(0);
+  const [pendingReq, setPendingReq] = useState(0);
+  const [acceptedReq, setAcceptedReq] = useState(0);
+
+
   return (
     <>
       <div className="flex">
         <div className="w-1/4 pl-2">
-          <SidebarClient />
+          <SidebarClient clientName={clientName} />
         </div>
         <div className="w-3/4 h-screen">
           <div class="px-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-10">
       <div class="grid grid-cols-3 row-gap-8 md:grid-cols-3">
         <div class="text-center md:border-r bg-blue-200">
-          <h6 class="text-4xl font-bold lg:text-5xl xl:text-6xl">4</h6>
+          <h6 class="text-4xl font-bold lg:text-5xl xl:text-6xl">{totalReq}</h6>
           <p class="text-sm font-medium tracking-widest text-gray-800 uppercase lg:text-base">
             All Requests
           </p>
         </div>
         <div class="text-center md:border-r bg-red-200">
-          <h6 class="text-4xl font-bold lg:text-5xl xl:text-6xl">1</h6>
+          <h6 class="text-4xl font-bold lg:text-5xl xl:text-6xl">{pendingReq}</h6>
           <p class="text-sm font-medium tracking-widest text-gray-800 uppercase lg:text-base">
             Pending Requests
           </p>
         </div>
         <div class="text-center md:border-r bg-green-200">
-          <h6 class="text-4xl font-bold lg:text-5xl xl:text-6xl">3</h6>
+          <h6 class="text-4xl font-bold lg:text-5xl xl:text-6xl">{acceptedReq}</h6>
           <p class="text-sm font-medium tracking-widest text-gray-800 uppercase lg:text-base">
             Accepted Request
           </p>
@@ -130,25 +177,25 @@ function ClientDash() {
                   </tr>
                 </thead>
                 <tbody>
-                  {TABLE_ROWS.map(
+                  {bookingRequests.map(
                     (
                       {
-                        date,
-                        req_id,
-                        req_details,
-                        to_lsps,
+                        datetime,
+                        _id,
+                        description,
+                        clientName,
                         status,
                         
                       },
                       index
                     ) => {
-                      const isLast = index === TABLE_ROWS.length - 1;
+                      const isLast = index === bookingRequests.length - 1;
                       const classes = isLast
                         ? "p-4"
                         : "p-4 border-b border-blue-gray-50";
 
                       return (
-                        <tr key={req_id}>
+                        <tr key={_id}>
                           <td className={classes}>
                             <div className="flex items-center gap-3">
                           
@@ -156,7 +203,7 @@ function ClientDash() {
                                 variant="small"
                                 color="blue-gray"
                               >
-                                {date}
+                                {datetime}
                               </Typography>
                             </div>
                           </td>
@@ -166,7 +213,7 @@ function ClientDash() {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {req_id}
+                              {_id}
                             </Typography>
                           </td>
                           <td className={`${classes} text-wrap`}>
@@ -178,7 +225,7 @@ function ClientDash() {
                             >
                               <div className="text-wrap">
 
-                              {req_details}
+                              {description}
                               </div>
                             </Typography>
                           </td>
@@ -188,7 +235,7 @@ function ClientDash() {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {to_lsps}
+                              {clientName}
                             </Typography>
                           </td>
                           <td className={classes}>

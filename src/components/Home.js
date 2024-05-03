@@ -79,42 +79,42 @@ function Home() {
                 Quick Access
               </Typography>
               <div className="mb-4 ">
-                <a href="/">
+                <a href="/cl/login">
                   <Button
                     ripple={false}
                     fullWidth={true}
                     className="m-2 pl-10 pr-10 pt-5 pb-5 bg-gray-50 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
                   >
-                    Client Login
+                    Customer Login
                   </Button>
                 </a>
-                <a href="/">
+                <a href="/cl/register">
                   <Button
                     ripple={false}
                     fullWidth={true}
                     className="m-2 pl-10 pr-10 pt-5 pb-5 bg-gray-50 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
                   >
-                    Register as a Client
+                    Register as a Customer
                   </Button>
                 </a>
               </div>
               <div className="mt-8">
-                <a href="/">
+                <a href="/ls/login">
                   <Button
                     ripple={false}
                     fullWidth={true}
                     className="m-2 pl-10 pr-10 pt-5 pb-5 bg-gray-50 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
                   >
-                    Labour Login
+                    Laborer Login
                   </Button>
                 </a>
-                <a href="/">
+                <a href="/ls/register">
                   <Button
                     ripple={false}
                     fullWidth={true}
                     className="m-2 pl-10 pr-10 pt-5 pb-5 bg-gray-50 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
                   >
-                    Labour as LSP
+                    Register as a Laborer
                   </Button>
                 </a>
               </div>

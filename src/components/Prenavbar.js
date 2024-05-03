@@ -16,7 +16,7 @@ function NavList() {
     <>
       <ul className="my-2 flex flex-wrap flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       
-        <Typography
+        {/* <Typography
           as="li"
           variant="small"
           color="black"
@@ -28,7 +28,7 @@ function NavList() {
           >
             Sitemap 
           </a>
-        </Typography>
+        </Typography> */}
         <Typography
         as="li"
         variant="small"

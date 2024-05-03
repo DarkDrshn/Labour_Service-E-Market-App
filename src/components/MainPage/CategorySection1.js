@@ -111,7 +111,7 @@ A plasterer is a skilled tradesperson specializing in the application of plaster
             />
           </CardHeader> */}
           <Typography className="p-2 pb-0 text-center" variant="h4">
-            Welder
+            Construction Worker
           </Typography>
           <CardBody className="p-2">
             <Typography
@@ -119,7 +119,7 @@ A plasterer is a skilled tradesperson specializing in the application of plaster
               color="gray"
               className="font-normal opacity-75 text-justify"
             >
-              A welder is a skilled tradesperson who specializes in  fusing materials, typically metals, using various techniques such as welding, brazing, soldering. They interpret blueprints, sketches, or specifications to determine the welding method
+              A Construction Worker is a skilled tradesperson who specializes in  fusing materials, typically metals, using various techniques such as welding, brazing, soldering. They interpret blueprints, sketches, or specifications to determine the welding method
             </Typography>
             <ul class=" list-disc list-inside">
               <li>Reading and interpreting blueprints</li>

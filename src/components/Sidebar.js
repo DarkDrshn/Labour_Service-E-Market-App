@@ -1,5 +1,6 @@
 import React from "react";
 import '../index.css'
+import axios from 'axios'
 import {
   Card,
   Typography,
@@ -34,9 +35,14 @@ import { Link } from "react-router-dom";
 import { Badge, Button } from "@material-tailwind/react";
 import {CheckIcon} from "@heroicons/react/24/outline";
 
-function Sidebar() {
+function Sidebar({laborerName,category,BookingFor,clientName,profileImage}) {
+  // console.log("Laborer Name:", laborerName); 
+  // console.log("category name:",category);
+
   const [open, setOpen] = React.useState(0);
   //   const [openAlert, setOpenAlert] = React.useState(true);
+
+
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
@@ -52,14 +58,14 @@ function Sidebar() {
       className="bg-gradient-to-tr from-green-400 to-green-600 border-2 border-white shadow-lg shadow-black/20"
     >     
           <img
-            src="https://pbs.twimg.com/profile_images/1387394251143540737/a6ksmdia_400x400.jpg"
+            src={profileImage}
             className="mx-auto mb-4 w-32 rounded-full"
             alt="Avatar"
           />
           </Badge>
-          <h5 className="mb-2 text-xl font-medium leading-tight">Award Anshuman</h5>
+          <h5 className="mb-2 text-xl font-medium leading-tight">{laborerName}</h5>
           <Typography color="blue-gray" className="font-medium" textGradient>
-            Road Roller Driver
+           {category}
           </Typography>
           {/* <img
             src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80"
@@ -146,7 +152,17 @@ function Sidebar() {
           Clients
         </ListItem>
         </Link>
-<Link to="/ls/cli_req">
+        <Link
+  to={{
+    pathname: "/ls/cli_req",
+    state: {
+      clientName: clientName,
+      BookingFor: BookingFor,
+      laborerName: laborerName,
+      category: category
+    }
+  }}
+>
         <ListItem>
           <ListItemPrefix>
             <RectangleStackIcon className="h-5 w-5" />
@@ -154,7 +170,7 @@ function Sidebar() {
           Clients Requests
         </ListItem>
         </Link>
-<Link to="/ls/cli_chat">
+<Link to="/ls/cli_chat" >
         <ListItem>
           <ListItemPrefix>
             <ChatBubbleLeftEllipsisIcon className="h-5 w-5" />
@@ -176,7 +192,7 @@ function Sidebar() {
 
        
           
-          <Link to="/ls/cli">
+          <Link to="/ls/profile">
           <ListItem>
             <ListItemPrefix>
               <PencilSquareIcon className="h-5 w-5" />
@@ -195,7 +211,7 @@ function Sidebar() {
           </Link>
           <hr className="my-2 border-blue-gray-50" />
 
-          <Link to="/ls/cli">
+          <Link to="/ls/help">
           <ListItem>
             <ListItemPrefix>
               <SignalIcon className="h-5 w-5" />

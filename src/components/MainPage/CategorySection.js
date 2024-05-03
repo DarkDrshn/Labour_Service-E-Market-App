@@ -93,7 +93,7 @@ export function CategoryCard() {
 
         </CardBody>
         <CardFooter className="pt-0 pb-0">
-          <a href="/">
+          <a href="/market">
             <Button
               ripple={false}
               fullWidth={true}

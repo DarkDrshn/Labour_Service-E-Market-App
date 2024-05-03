@@ -1,4 +1,7 @@
-import React from "react";
+import React ,{useState,useEffect}from "react";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+// import {useHistory} from "react-router-dom"
 import '../index.css';
 import {
   Navbar,
@@ -30,6 +33,9 @@ import {
   PuzzlePieceIcon,
   GiftIcon,
 } from "@heroicons/react/24/outline";
+import LaborerLogout  from "./labour/L_logout";
+import ClientLogout from "./client/Client_logout";
+
 
 const colors = {
   blue: "bg-blue-50 text-blue-500",
@@ -179,7 +185,25 @@ function NavListMenu() {
   );
 }
 
-function NavList({ isAuthenticated }) {
+// NavList component
+function NavList({ isAuthenticated, userName, handleLogout }) {
+  const isClient = Cookies.get("clientName") !== undefined;
+  const isLaborer = Cookies.get("laborerName") !== undefined;
+  const [showRegisterDropdown, setShowRegisterDropdown] = React.useState(false);
+  const [showLoginDropdown, setShowLoginDropdown] = React.useState(false);
+  const [selectedOption, setSelectedOption] = React.useState(null);
+
+  const handleRegister = (option) => {
+    setSelectedOption(option);
+    setShowRegisterDropdown(false);
+    // You can perform any other actions here based on the selected option
+  };
+
+  const handleLogin = (option) => {
+    setSelectedOption(option);
+    setShowLoginDropdown(false);
+  };
+
   return (
     <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
       <Typography
@@ -190,50 +214,137 @@ function NavList({ isAuthenticated }) {
         className="font-normal"
       >
         <ListItem className="flex items-center gap-2 py-2 pr-4">
-          <CubeTransparentIcon className="h-[18px] w-[18px]" />
           Labour Marketplace
         </ListItem>
       </Typography>
       <NavListMenu />
-      <Typography
-        as="a"
-        href="/ls/cli"
-        variant="small"
-        color="blue-gray"
-        className="font-normal"
-      >
-        <ListItem className="flex items-center gap-2 py-2 pr-4">
-          <UserCircleIcon className="h-[18px] w-[18px]" />
-          Account
-        </ListItem>
-      </Typography>
-      <div className="hidden gap-2 lg:flex">
-        <a href="/login">
-          <Button variant="text" size="sm" color="blue-gray">
-            Log In
+      {(isAuthenticated && (isClient || isLaborer)) && (
+        <Typography
+          as="a"
+          href={isClient ? "/client/dash" : "/ls/cli"}
+          variant="small"
+          color="blue-gray"
+          className="font-normal"
+        >
+          <ListItem className="flex items-center gap-2 py-2 pr-4">
+            <UserCircleIcon className="h-[18px] w-[18px]" />
+            Account
+          </ListItem>
+        </Typography>
+      )}
+      {isAuthenticated && (
+        <div className="hidden gap-2 lg:flex">
+          <Typography variant="small" color="blue-gray" className="font-normal">
+            <ListItem className="flex items-center gap-2 py-2 pr-4">
+              Welcome, {userName}!
+            </ListItem>
+          </Typography>
+          <Button variant="text" size="sm" color="blue-gray" onClick={handleLogout}>
+            Logout
           </Button>
-        </a>
-
-       
-
-        <a href="/register">
-          <Button variant="gradient" size="sm">
-            Register
-          </Button>
-        </a>
-     
-     
-        
-        
-      </div>
+        </div>
+      )}
+      {!isAuthenticated && (
+        <div className="hidden gap-2 lg:flex">
+          <div className="relative">
+            <Button variant="text" size="sm" color="blue-gray" onClick={() => setShowLoginDropdown(!showLoginDropdown)}>
+              Log In
+            </Button>
+            {showLoginDropdown && (
+              <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                  <a href="/cl/login">
+                    <button onClick={() => handleLogin("Client")} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                      Customer
+                    </button>
+                  </a>
+                  <a href="/ls/login">
+                    <button onClick={() => handleLogin("Labour")} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                      Labourer
+                    </button>
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="relative">
+            <Button variant="gradient" size="sm" fullWidth onClick={() => setShowRegisterDropdown(!showRegisterDropdown)}>
+              Register
+            </Button>
+            {showRegisterDropdown && (
+              <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                  <a href="/cl/register">
+                    <button onClick={() => handleRegister("Client")} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                      Customer
+                    </button>
+                  </a>
+                  <a href="/ls/register">
+                    <button onClick={() => handleRegister("Labour")} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                      Labourer
+                    </button>
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </List>
   );
 }
 
-function NavbarWeb({ isAuthenticated }) {
-  const [openNav, setOpenNav] = React.useState(false);
 
-  React.useEffect(() => {
+
+
+// NavbarWeb component
+
+function NavbarWeb() {
+  const [openNav, setOpenNav] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const loggedIn = Cookies.get("loggedIn");
+    const clientName = Cookies.get("clientName");
+    const laborerName = Cookies.get("laborerName")
+    console.log(clientName);
+    console.log(laborerName);
+
+    if (loggedIn === "true" ) {
+      const name =clientName || laborerName
+      // if(clientName){
+      //   setUserName(clientName)
+      // } else if(laborerName){
+      //   setUserName(laborerName)
+      // }
+      setUserName(name)
+      setIsAuthenticated(true);
+     }
+  }, []);
+
+  const handleLogout = async () => {
+    Cookies.remove('loggedIn');
+    Cookies.remove('accessToken');
+    Cookies.remove('clientId');
+    Cookies.remove('categoryName');
+    Cookies.remove('labourId');
+    const clientName = Cookies.get("clientName");
+    if (clientName) {
+      ClientLogout(); // Use the imported ClientLogout function
+      Cookies.remove('clientName');
+    } else {
+      LaborerLogout(); // Use the imported LaborerLogout function
+      Cookies.remove('laborerName');
+    }
+    setIsAuthenticated(false);
+    setUserName("");
+     window.location.href = '/'
+  }
+
+
+
+  useEffect(() => {
     window.addEventListener(
       "resize",
       () => window.innerWidth >= 960 && setOpenNav(false)
@@ -249,12 +360,14 @@ function NavbarWeb({ isAuthenticated }) {
           variant="h6"
           className="mr-4 cursor-pointer py-1.5 lg:ml-2"
         >
-          Logo & Icon
+          <div className="flex items-center">
+            <img src="/images/logo.png" alt="logo" className="h-10 w-auto" />
+            <span className="text-xl font-bold ml-2">LABOURCENTRE</span>
+          </div>
         </Typography>
         <div className="hidden lg:block">
-          <NavList />
+          <NavList isAuthenticated={isAuthenticated} userName={userName} handleLogout={handleLogout} />
         </div>
-
         <IconButton
           variant="text"
           color="blue-gray"
@@ -269,23 +382,11 @@ function NavbarWeb({ isAuthenticated }) {
         </IconButton>
       </div>
       <Collapse open={openNav}>
-        <NavList />
-        <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
-          <Button variant="outlined" size="sm" color="blue-gray" fullWidth>
-            Log In
-          </Button>
-
-
-
-       
-
-          <Button variant="gradient" size="sm" fullWidth>
-            Register
-          </Button>
-        </div>
+        <NavList isAuthenticated={isAuthenticated} userName={userName} handleLogout={handleLogout} />
       </Collapse>
     </Navbar>
   );
 }
+
 
 export default NavbarWeb;

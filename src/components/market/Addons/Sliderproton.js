@@ -20,11 +20,11 @@ function SliderProton({ value, changeExperience }) {
         onChange={changeExperience}
         color="gray"
         marks={marks}
-        trackClassNames="bg-gray-400 h-2"
-        railClassNames="bg-gray-300 h-2"
-        thumbClassNames="bg-black w-6 h-6"
-        markClassNames="absolute -mb-8 text-sm text-gray-500"
-        markActiveClassNames="font-bold"
+        trackclassnames="bg-gray-400 h-2"
+        railclassnames="bg-gray-300 h-2"
+        thumbclassnames="bg-black w-6 h-6"
+        markclassnames="absolute -mb-8 text-sm text-gray-500"
+        markactiveclassnames="font-bold"
       />
     </div>
   );

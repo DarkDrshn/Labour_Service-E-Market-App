@@ -89,6 +89,12 @@ code {
     font-size: 1.5rem;
     font-weight: bolder;
   }
+
+  .card_con h2{
+    font-size: 2rem;
+    font-weight: bolder;
+  }
+
   .card_con h5{
     font-size: 0.8rem;
     color: rgb(0, 0, 0);

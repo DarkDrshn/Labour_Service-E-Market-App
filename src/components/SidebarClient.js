@@ -34,7 +34,8 @@ import { Link } from "react-router-dom";
 import { Badge, Button } from "@material-tailwind/react";
 import {CheckIcon} from "@heroicons/react/24/outline";
 
-function SidebarClient() {
+function SidebarClient({clientName}) {
+  console.log(clientName);
   const [open, setOpen] = React.useState(0);
   //   const [openAlert, setOpenAlert] = React.useState(true);
 
@@ -52,15 +53,15 @@ function SidebarClient() {
       className="bg-gradient-to-tr from-green-400 to-green-600 border-2 border-white shadow-lg shadow-black/20"
     >
           <img
-            src="https://scontent.fbom36-1.fna.fbcdn.net/v/t39.30808-1/307016352_469391235206449_770583242846967300_n.jpg?stp=c3.0.320.320a_dst-jpg_p320x320&_nc_cat=109&ccb=1-7&_nc_sid=596444&_nc_ohc=tKjP3AGgo3kAX9AMGMk&_nc_ht=scontent.fbom36-1.fna&oh=00_AfCazGg9--fKQzrNXsQcsIm73q3Qtn08r1jm1bPbsD0p_Q&oe=65E37F2D"
+            src="https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg"
             className="mx-auto mb-4 w-32 rounded-full"
             alt="Avatar"
           />
           </Badge>
-          <h5 className="mb-2 text-xl font-medium leading-tight">Sachin Tichkule</h5>
-          <Typography color="blue-gray" className="font-medium" textGradient>
+          <h5 className="mb-2 text-xl font-medium leading-tight">{clientName}</h5>
+          {/* <Typography color="blue-gray" className="font-medium" textGradient>
             Road Contractor
-          </Typography>
+          </Typography> */}
         </div>
         <List>
           {/* <Accordion
@@ -136,7 +137,7 @@ function SidebarClient() {
           DashBoard
         </ListItem>
         </Link>
-<Link to="/client/dash">
+<Link to="/client/dash" clientName={clientName}>
         <ListItem>
           <ListItemPrefix>
             <RectangleStackIcon className="h-5 w-5" />
@@ -144,7 +145,7 @@ function SidebarClient() {
           Submitted Request
         </ListItem>
         </Link>
-<Link to="/client/dash">
+<Link to="/client/dash" clientName={clientName}>
         <ListItem>
           <ListItemPrefix>
             <ChatBubbleLeftEllipsisIcon className="h-5 w-5" />
@@ -152,7 +153,7 @@ function SidebarClient() {
           Chats
         </ListItem>
         </Link>
-<Link to="/client/dash">
+<Link to="/client/service" className={clientName}>
         <ListItem>
           <ListItemPrefix>
             <DocumentTextIcon className="h-5 w-5" />
@@ -166,7 +167,7 @@ function SidebarClient() {
 
        
           
-          <Link to="/client/dash">
+          <Link to="/client/profile">
           <ListItem>
             <ListItemPrefix>
               <PencilSquareIcon className="h-5 w-5" />
@@ -176,14 +177,14 @@ function SidebarClient() {
           </Link>
           <hr className="my-2 border-blue-gray-50" />
 
-          <Link to="/client/dash">
           <ListItem>
             <ListItemPrefix>
               <SignalIcon className="h-5 w-5" />
             </ListItemPrefix>
+            <Link to="/client/help">
               Help
+            </Link>
           </ListItem>
-          </Link>
         </List>
       </Card>
     </>
